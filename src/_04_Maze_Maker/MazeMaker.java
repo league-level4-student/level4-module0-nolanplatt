@@ -40,21 +40,42 @@ public class MazeMaker{
 		currentCell.setBeenVisited(true);
 
 		//B. check for unvisited neighbors using the cell
-		getUnvisitedNeighbors(currentCell);
-			
+		ArrayList<Cell> result = getUnvisitedNeighbors(currentCell);
+		
 		
 		//C. if has unvisited neighbors,
-		
+		if(result.size() > 0) {
 			//C1. select one at random.
+			Random r = new Random();
+			int randomNeighbor = r.nextInt(result.size());
+			Cell randomCell = result.get(randomNeighbor);
+			
 			
 			//C2. push it to the stack
-		
+				uncheckedCells.push(randomCell);
 			//C3. remove the wall between the two cells
-
+			if(currentCell.getX() - 1 == randomCell.getX() && currentCell.getY() == randomCell.getY()) {
+				currentCell.setNorthWall(false);
+				randomCell.setSouthWall(false);
+			}
+			else if(currentCell.getX() + 1 == randomCell.getX() && currentCell.getY() == randomCell.getY()) {
+			currentCell.setSouthWall(false);
+			randomCell.setNorthWall(false);
+			}
+			else if(currentCell.getX() == randomCell.getX() && currentCell.getY() + 1 == randomCell.getY()) {
+				currentCell.setEastWall(false);
+				randomCell.setWestWall(false);
+			}
+			else if(currentCell.getX() == randomCell.getX() && currentCell.getY() - 1 == randomCell.getY()) {
+				currentCell.setWestWall(false);
+				randomCell.setEastWall(false);
+			}
 			//C4. make the new cell the current cell and mark it as visited
-		
+			currentCell.hasBeenVisited();
+			randomCell.hasBeenVisited();
 			//C5. call the selectNextPath method with the current cell
-			
+			selectNextPath(currentCell);
+		}
 			
 		//D. if all neighbors are visited
 		
@@ -74,13 +95,21 @@ public class MazeMaker{
 	//   This method will check if c1 and c2 are adjacent.
 	//   If they are, the walls between them are removed.
 	private static void removeWalls(Cell c1, Cell c2) {
-		
 	}
 	
 	//8. Complete the getUnvisitedNeighbors method
 	//   Any unvisited neighbor of the passed in cell gets added
 	//   to the ArrayList
 	private static ArrayList<Cell> getUnvisitedNeighbors(Cell c) {
-		return null;
+	ArrayList<Cell> Visitors = new ArrayList<Cell>();
+	
+		for (int i = 0; i < maze.cells.length; i++) {
+			for (int j = 0; j < maze.cells.length; j++) {
+				if(!maze.cells[i][j].hasBeenVisited()) {
+					Visitors.add(maze.cells[i][j]);
+				}
+			}
+		}
+		return Visitors;
 	}
 }
